@@ -10,6 +10,10 @@ import { createLogger } from "@/lib/logger";
 
 const logger = createLogger('api:analyze');
 
+function buildImageDataUrl(base64: string, mimeType: string) {
+    return `data:${mimeType};base64,${base64}`;
+}
+
 export async function POST(req: Request) {
     logger.info('Analyze API called');
 
@@ -46,6 +50,10 @@ export async function POST(req: Request) {
                 logger.debug({ mimeType, base64Length: imageBase64.length }, 'Parsed Data URL');
             }
         }
+
+        mimeType = mimeType || 'image/jpeg';
+        const imageUrl = buildImageDataUrl(imageBase64, mimeType);
+        logger.debug({ mimeType, imageUrlPrefix: imageUrl.substring(0, Math.min(50, imageUrl.length)) }, 'Built data URL for provider');
 
         // 先获取用户年级信息，用于动态生成 AI prompt 中的标签列表
         let userGrade: 7 | 8 | 9 | 10 | 11 | 12 | null = null;
@@ -103,7 +111,7 @@ export async function POST(req: Request) {
 
         logger.info({ userGrade, userGradeSemester, subject: subjectChinese }, 'Calling AI service for image analysis');
         const aiService = getAIService();
-        const analysisResult = await aiService.analyzeImage(imageBase64, mimeType, language, userGrade, subjectChinese, userGradeSemester);
+        const analysisResult = await aiService.analyzeImage(imageBase64, mimeType, language, userGrade, subjectChinese, userGradeSemester, imageUrl);
 
         logger.debug({
             knowledgePointsCount: analysisResult.knowledgePoints?.length,

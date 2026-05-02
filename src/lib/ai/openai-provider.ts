@@ -136,7 +136,7 @@ export class OpenAIProvider implements AIService {
         }
     }
 
-    async analyzeImage(imageBase64: string, mimeType: string = "image/jpeg", language: 'zh' | 'en' = 'zh', grade?: 7 | 8 | 9 | 10 | 11 | 12 | null, subject?: string | null, gradeSemester?: string | null): Promise<ParsedQuestion> {
+    async analyzeImage(imageBase64: string, mimeType: string = "image/jpeg", language: 'zh' | 'en' = 'zh', grade?: 7 | 8 | 9 | 10 | 11 | 12 | null, subject?: string | null, gradeSemester?: string | null, imageUrl?: string): Promise<ParsedQuestion> {
         const config = getAppConfig();
 
         // 从数据库获取各学科标签
@@ -182,7 +182,7 @@ export class OpenAIProvider implements AIService {
                             {
                                 type: "image_url",
                                 image_url: {
-                                    url: `data:${mimeType};base64,[...${imageBase64.length} bytes base64 data...]`,
+                                    url: imageUrl || `data:${mimeType};base64,[...${imageBase64.length} bytes base64 data...]`,
                                 },
                             },
                         ],
@@ -206,7 +206,7 @@ export class OpenAIProvider implements AIService {
                             {
                                 type: "image_url",
                                 image_url: {
-                                    url: `data:${mimeType};base64,${imageBase64}`,
+                                    url: imageUrl || `data:${mimeType};base64,${imageBase64}`,
                                 },
                             },
                         ],

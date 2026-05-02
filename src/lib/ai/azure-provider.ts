@@ -145,7 +145,8 @@ export class AzureOpenAIProvider implements AIService {
         language: 'zh' | 'en' = 'zh',
         grade?: 7 | 8 | 9 | 10 | 11 | 12 | null,
         subject?: string | null,
-        gradeSemester?: string | null
+        gradeSemester?: string | null,
+        imageUrl?: string
     ): Promise<ParsedQuestion> {
         const config = getAppConfig();
 
@@ -184,7 +185,7 @@ export class AzureOpenAIProvider implements AIService {
                 messages: [
                     {
                         role: "system",
-                        content: systemPrompt,
+                        content: systemPrompt
                     },
                     {
                         role: "user",
@@ -192,7 +193,7 @@ export class AzureOpenAIProvider implements AIService {
                             {
                                 type: "image_url",
                                 image_url: {
-                                    url: `data:${mimeType};base64,${imageBase64}`,
+                                    url: imageUrl || `data:${mimeType};base64,${imageBase64}`,
                                 },
                             },
                         ],

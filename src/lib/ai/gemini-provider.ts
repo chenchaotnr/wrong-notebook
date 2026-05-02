@@ -158,7 +158,7 @@ export class GeminiProvider implements AIService {
         }
     }
 
-    async analyzeImage(imageBase64: string, mimeType: string = "image/jpeg", language: 'zh' | 'en' = 'zh', grade?: 7 | 8 | 9 | 10 | 11 | 12 | null, subject?: string | null, gradeSemester?: string | null): Promise<ParsedQuestion> {
+    async analyzeImage(imageBase64: string, mimeType: string = "image/jpeg", language: 'zh' | 'en' = 'zh', grade?: 7 | 8 | 9 | 10 | 11 | 12 | null, subject?: string | null, gradeSemester?: string | null, _imageUrl?: string): Promise<ParsedQuestion> {
         const config = getAppConfig();
 
         // 从数据库获取各学科标签
